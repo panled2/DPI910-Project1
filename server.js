@@ -12,6 +12,26 @@ app.use('/', express.static(path.join(__dirname, 'static')))
 app.use(bodyParser.json())
 
 
+
+
+app.post('/api/register', async (req,res) =>{
+    console.log(req.body)
+    
+    const { username, password } = req.body
+
+    try {
+        const response = await User.create({
+            username, 
+            password
+        })
+        console.log('User has been created!! ', response)
+    } catch (error) {
+        console.log(error)
+        return res.json({ status: 'User already exist'})
+    }
+    res.json({ status: 'ok'})
+})
+
 app.post('/api/login', async (req,res) =>{
     const { username, password } = req.body
 	const user = await User.findOne({ username }).lean()
@@ -27,25 +47,6 @@ app.post('/api/login', async (req,res) =>{
 	}
 
 })
-
-app.post('/api/register', async (req,res) =>{
-    console.log(req.body)
-    
-    const { username, password } = req.body
-
-    try {
-        const response = await User.create({
-            username, 
-            password
-        })
-        console.log('User has been created!! ', response)
-    } catch (error) {
-        console.log(error)
-        return res.json({ status: 'error'})
-    }
-    res.json({ status: 'ok'})
-})
-
 app.listen(9999, () => {
 	console.log('Server up at 9999')
 })
