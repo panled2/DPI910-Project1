@@ -34,18 +34,13 @@ app.post('/api/register', async (req,res) =>{
 
 app.post('/api/login', async (req,res) =>{
     const { username, password } = req.body
-	const user = await User.findOne({ username }).lean()
+	const user = await User.findOne({ username,password }).lean()
 
 	if (!user) {
 		return res.json({ status: 'error', error: 'Invalid username/password' })
 	}
 
-    const pass = await User.findOne({ password }).lean()
-
-	if (!pass) {
-		return res.json({ status: 'error', error: 'Invalid username/password' })
-	}
-
+    res.json({ status: 'ok'})
 })
 app.listen(9999, () => {
 	console.log('Server up at 9999')
